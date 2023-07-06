@@ -13,6 +13,7 @@ function Game() {
   const [correctLetters, setCorrectLetters] = useState([]);
   const [wrongLetters, setWrongLetters] = useState([]);
   const [showNotification, setShowNotification] = useState(false);
+  const [haveWord, setHaveWord] = useState(false);
 
   useEffect(() => {
     //trigger async function for API call when word is set to ""
@@ -25,6 +26,8 @@ function Game() {
           let [results] = await response.json();
           //set state variable to pass props to word component
           setWord(results);
+          //set state that a word has been chosen
+          setHaveWord(true);
         } catch (error) {
           console.log("error", error);
         }
@@ -71,6 +74,8 @@ function Game() {
 
   function playAgain() {
     setPlayable(true);
+    //set haveWord to false so win pop up doesn't appear before generateWord function has run
+    setHaveWord(false);
     //empty letter arrays and set word to "" to retrigger api call
     setCorrectLetters([]);
     setWrongLetters([]);
@@ -90,6 +95,7 @@ function Game() {
         selectedWord={word}
         setPlayable={setPlayable}
         playAgain={playAgain}
+        haveWord={haveWord}
       />
       <Notification showNotification={showNotification} />
     </div>
